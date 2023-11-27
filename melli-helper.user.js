@@ -7,7 +7,7 @@
 // @match        https://cytu.be/r/25_days_of_autism
 // @match        https://cytu.be/r/BestKeyTube
 // @match        https://cytu.be/r/yayifications
-// @downloadURL
+// @downloadURL  https://github.com/oyasumellisai/melli-helper/raw/main/melli-helper.user.js
 // @grant        none
 // ==/UserScript==
 // Not tested on BKT / yay
