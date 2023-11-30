@@ -233,6 +233,8 @@ function callbackVideoTitle(mutationList, observer) {
     };
     window.setTimeout(scrollBottomChat,3000);
     */
+    // disabling page refresh after spam for now
+    /*
     if(isOnList(previousVideoTitle,spamArr)) {
         // scroll to bottom of page to see polls
         window.scrollTo(0,document.body.scrollHeight);
@@ -240,6 +242,7 @@ function callbackVideoTitle(mutationList, observer) {
         window.setTimeout(location.reload(),3000);
     }
     setupVideo();
+    */
     /*
     scrollToVideo();
     checkNico();
