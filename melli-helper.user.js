@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name         25 Days Recording Helper 2023
 // @namespace    http://tampermonkey.net/
-// @version      2023.11.26
+// @homepage     https://github.com/oyasumellisai/melli-helper
+// @version      2023.11.29
 // @description  Refresh media when somebody fucked up. Disable Nico on spam so recording machine doesn't die. what the fuck am I doing
 // @author       (You)
 // @match        https://cytu.be/r/25_days_of_autism
 // @match        https://cytu.be/r/BestKeyTube
 // @match        https://cytu.be/r/yayifications
 // @downloadURL  https://github.com/oyasumellisai/melli-helper/raw/main/melli-helper.user.js
-// @updateURL  https://github.com/oyasumellisai/melli-helper/raw/main/melli-helper.user.js
+// @updateURL    https://github.com/oyasumellisai/melli-helper/raw/main/melli-helper.user.js
 // @grant        none
 // ==/UserScript==
 // Not tested on BKT / yay
