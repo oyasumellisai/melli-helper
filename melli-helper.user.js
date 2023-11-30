@@ -2,7 +2,7 @@
 // @name         25 Days Recording Helper 2023
 // @namespace    http://tampermonkey.net/
 // @homepage     https://github.com/oyasumellisai/melli-helper
-// @version      2023.11.29
+// @version      2023.11.29.1
 // @description  Refresh media when somebody fucked up. Disable Nico on spam so recording machine doesn't die. what the fuck am I doing
 // @author       (You)
 // @match        https://cytu.be/r/25_days_of_autism
@@ -320,7 +320,8 @@ function checkYoutube() {
     try{
         if(document.getElementsByClassName("ytp-large-play-button ytp-button")[0].ariaLabel == "Play") {
             console.log("Playing YouTube.");
-            document.getElementsByClassName("ytp-large-play-button ytp-button")[0].click();
+            // Should only do this when paused, doesnt seem to be
+            // document.getElementsByClassName("ytp-large-play-button ytp-button")[0].click();
         }
     }
     catch(e) {
