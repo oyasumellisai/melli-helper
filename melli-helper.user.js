@@ -2,7 +2,7 @@
 // @name         25 Days Recording Helper 2023
 // @namespace    http://tampermonkey.net/
 // @homepage     https://github.com/oyasumellisai/melli-helper
-// @version      2023.11.30.2
+// @version      2023.11.30.3
 // @description  Refresh media when somebody fucked up. Disable Nico on spam so recording machine doesn't die. what the fuck am I doing
 // @author       (You)
 // @match        https://cytu.be/r/25_days_of_autism
@@ -223,6 +223,7 @@ function callbackVideoTitle(mutationList, observer) {
     previousVideoTitle = activeVideoTitle;
     activeVideoTitle = getActiveVideoTitle();
     console.log("New video detected...\nThis is video number " + videosSinceRefresh + "\nTitle: " + activeVideoTitle);
+    setupVideo();
     // Videocount is not determined accurately on refresh; ends up being incremented to 3
     // On the second video after refresh we refresh for performance reasons
     /*
@@ -242,7 +243,7 @@ function callbackVideoTitle(mutationList, observer) {
         // reload
         window.setTimeout(location.reload(),3000);
     }
-    setupVideo();
+    
     */
     /*
     scrollToVideo();
