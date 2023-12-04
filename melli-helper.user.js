@@ -324,6 +324,7 @@ function checkYoutube() {
             console.log("Playing YouTube.");
             // Should only do this when paused, doesnt seem to be
             // document.getElementsByClassName("ytp-large-play-button ytp-button")[0].click();
+            // document.querySelector('.ytp-large-play-button.ytp-button.ytp-large-play-button-red-bg').click()
         }
     }
     catch(e) {
