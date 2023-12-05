@@ -2,7 +2,7 @@
 // @name         witcheffect-refresh
 // @namespace    http://tampermonkey.net/
 // @homepage     https://github.com/oyasumellisai/melli-helper
-// @version      2023.12.05.2
+// @version      2023.12.05.3
 // @description  Refresh on new media
 // @author       (You)
 // @match        https://witcheffect.com/
@@ -12,22 +12,15 @@
 // ==/UserScript==
 // Not tested on BKT / yay
 
-/*
-    Trying to do this 2 ways
-    - refresh after new video is loaded (this didnt work as I hoped)
-    - refresh on every hour / half hour
-*/
-
-
 console.log("Refresher started.");
 setupFallbackRefresh()
 setTimeout(setupObserver, 2000);
 
-// Refresh every half hour
+// Refresh every 24m
 function setupFallbackRefresh(){
     var now = new Date();
     //var millisTillRefresh = 1800000 - (now - new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)) % 1800000;
-    var millisTillRefresh = 30*60*1000;
+    var millisTillRefresh = 24*60*1000;
     console.log("Fallback: Refreshing in "+(millisTillRefresh/1000/60)+" minutes")
     setTimeout(function(){ location.reload(); }, millisTillRefresh);
 }
@@ -43,7 +36,7 @@ function setupObserver() {
     // Create a callback
     let callback = function(mutationsList) {
         console.log("callback");
-        console.log("New video detected...\nThis is video title " + document.getElementById('videoContainer').getElementsByTagName("iframe")[0].getAttribute('src'));
+        console.log("New video detected...\nThis is video src=" + document.getElementById('videoContainer').getElementsByTagName("iframe")[0].getAttribute('src'));
         //refresh in 10 seconds
         setTimeout(function(){ location.reload(); }, 10*1000);
     }
