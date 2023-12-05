@@ -2,7 +2,7 @@
 // @name         witcheffect-refresh
 // @namespace    http://tampermonkey.net/
 // @homepage     https://github.com/oyasumellisai/melli-helper
-// @version      2023.12.05.0
+// @version      2023.12.05.2
 // @description  Refresh on new media
 // @author       (You)
 // @match        https://witcheffect.com/
@@ -20,12 +20,40 @@
 
 
 console.log("Refresher started.");
+setupFallbackRefresh()
+setTimeout(setupObserver, 2000);
 
-// Refresh on every half hour / hour
-var now = new Date();
-var millisTillRefresh = 1800000 - (now - new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)) % 1800000;
-setTimeout(function(){ location.reload(); }, millisTillRefresh);
+// Refresh every half hour
+function setupFallbackRefresh(){
+    var now = new Date();
+    //var millisTillRefresh = 1800000 - (now - new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)) % 1800000;
+    var millisTillRefresh = 30*60*1000;
+    console.log("Fallback: Refreshing in "+(millisTillRefresh/1000/60)+" minutes")
+    setTimeout(function(){ location.reload(); }, millisTillRefresh);
+}
 
+// Refresh on video load
+function setupObserver() {
+    console.log("Setting up observer...")
+    console.log("This is video src=" + document.getElementById('videoContainer').getElementsByTagName("iframe")[0].getAttribute('src'));
+    // Get the iframe body
+    let node = document.getElementById('videoContainer');
+    // Setup the config
+    let config = { attributes: true, childList: true }
+    // Create a callback
+    let callback = function(mutationsList) {
+        console.log("callback");
+        console.log("New video detected...\nThis is video title " + document.getElementById('videoContainer').getElementsByTagName("iframe")[0].getAttribute('src'));
+        //refresh in 10 seconds
+        setTimeout(function(){ location.reload(); }, 10*1000);
+    }
+
+    // Watch the iframe for changes
+    let observer = new MutationObserver(callback);
+    observer.observe(node, config);
+}
+
+/*
 // Refresh on video load
 window.setTimeout(setupVideoTitleObserver,5000);
 function setupVideoTitleObserver() {
@@ -50,3 +78,4 @@ function callbackVideoTitle(mutationList, observer) {
     setTimeout(function(){ location.reload(); }, 10*1000);
 }
 
+*/
