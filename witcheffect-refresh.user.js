@@ -68,6 +68,7 @@ function setupObserver() {
     // Watch the iframe for changes
     let observer = new MutationObserver(callback);
     observer.observe(node, config);
+    console.log("Observer set")
 }
 
 
