@@ -2,7 +2,7 @@
 // @name         witcheffect-refresh
 // @namespace    http://tampermonkey.net/
 // @homepage     https://github.com/oyasumellisai/melli-helper
-// @version      2023.12.05.3
+// @version      2023.12.11.01
 // @description  Refresh on new media
 // @author       (You)
 // @match        https://witcheffect.com/
@@ -12,63 +12,75 @@
 // ==/UserScript==
 // Not tested on BKT / yay
 
-console.log("Refresher started.");
-setupFallbackRefresh()
-setTimeout(setupObserver, 2000);
+/*
+    1) Get the time the current video ends
+    2) Calculate how long til that is
+    2) Set a timeout to refresh after that time passes
+*/
 
-// Refresh every 24m
-function setupFallbackRefresh(){
+console.log("Refresher started.");
+const time = { finish: "", ampm: "", time: "", hr: 0, min: 0, sec: 0 };
+
+// run main func
+(function() {
+    //console.log("func");
+    setTimeout(main, 2000);
+})();
+
+// XPath works better than regular selectors
+function getElementByXpath(path) {
+    //console.log("getting xpath");
+    return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+}
+
+// grab finish time from schedule
+function getFinishTime() {
+    console.log("Getting finish time");
+    getElementByXpath('/html/body/div/section/c/header/nav/div[3]/div').click();
+    setTimeout(function() { 
+        time.finish = document.querySelector('#tableContainer > table > tr:nth-child(2) > td:nth-child(4)').innerText;
+        console.log("Finish time: "+time.finish);
+        getElementByXpath('/html/body/div/section/c/header/nav/div[3]/div').click();
+    },200); 
+}
+
+// parse the finish time 
+function parseTime() {
+    var finishSplit = time.finish.split(' ');
+    //console.log("fs1: "+finishSplit[0]+" fs2: "+finishSplit[1]);
+    time.time = finishSplit[0];
+    time.ampm = finishSplit[1];
+    var timeSplit = time.time.split(':');
+    time.hr = Number(timeSplit[0]);
+    time.min = Number(timeSplit[1]);
+    time.sec = Number(timeSplit[2]);
+
+    if(time.ampm == "PM") {
+        time.hr += 12;
+    }
+}
+
+// calculate ms until time to refresh
+function getMillisTillRefresh() {
     var now = new Date();
-    //var millisTillRefresh = 1800000 - (now - new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0)) % 1800000;
-    var millisTillRefresh = 24*60*1000;
-    console.log("Fallback: Refreshing in "+(millisTillRefresh/1000/60)+" minutes")
+    var millisTillRefresh = new Date(now.getFullYear(), now.getMonth(), now.getDate(), time.hr, time.min, time.sec, 0) - now;
+    if (millisTillRefresh < 0) {
+         millisTillRefresh += 86400000; // it's after the time, try tomorrow.
+    }
+    console.log("Millis till refresh: "+millisTillRefresh);
+    return millisTillRefresh
+}
+
+// setTimeout based on getMillisTillRefresh
+function setRefreshTimeout() {
+    var millisTillRefresh = getMillisTillRefresh()
     setTimeout(function(){ location.reload(); }, millisTillRefresh);
 }
 
-// Refresh on video load
-function setupObserver() {
-    console.log("Setting up observer...")
-    console.log("This is video src=" + document.getElementById('videoContainer').getElementsByTagName("iframe")[0].getAttribute('src'));
-    // Get the iframe body
-    let node = document.getElementById('videoContainer');
-    // Setup the config
-    let config = { attributes: true, childList: true }
-    // Create a callback
-    let callback = function(mutationsList) {
-        console.log("callback");
-        console.log("New video detected...\nThis is video src=" + document.getElementById('videoContainer').getElementsByTagName("iframe")[0].getAttribute('src'));
-        //refresh in 10 seconds
-        setTimeout(function(){ location.reload(); }, 10*1000);
-    }
-
-    // Watch the iframe for changes
-    let observer = new MutationObserver(callback);
-    observer.observe(node, config);
+// main: add delays between functions because Im too stupid for async + observer funcs
+function main() {
+    //console.log("main");
+    setTimeout(getFinishTime,400);
+    setTimeout(parseTime, 800);
+    setTimeout(setRefreshTimeout, 1200);
 }
-
-/*
-// Refresh on video load
-window.setTimeout(setupVideoTitleObserver,5000);
-function setupVideoTitleObserver() {
-    console.log("Setting up observer...");
-    const targetNode = document.getElementById('videoContainer').getElementsByTagName("iframe")[0];
-    const observerOptions = {
-        ///characterData: true, attributes: false, childList: false, subtree: true
-        characterData:true,
-        childList: true,
-        attributes: true,
-        // Omit (or set to false) to observe only changes to the parent node
-        subtree: true
-    }
-    const observerVideoTitle = new MutationObserver(callbackVideoTitle);
-    observerVideoTitle.observe(targetNode, observerOptions);
-    console.log("Video Title observer setup complete.");
-}
-
-function callbackVideoTitle(mutationList, observer) {
-    console.log("New video detected...\nThis is video title " + document.getElementById('videoContainer').getElementsByTagName("iframe")[0].getAttribute('src'));
-    //refresh in 10 seconds
-    setTimeout(function(){ location.reload(); }, 10*1000);
-}
-
-*/
