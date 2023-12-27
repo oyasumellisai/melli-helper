@@ -13,7 +13,7 @@
 // Not tested on BKT / yay
 
 var now = new Date();
-var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 55, 0, 0) - now;
+var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 19, 55, 0, 0) - now;
 if (millisTill10 < 0) {
      millisTill10 += 86400000; // it's after the time, try tomorrow.
 }
