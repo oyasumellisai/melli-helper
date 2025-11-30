@@ -45,8 +45,8 @@ window.addEventListener('load', function() {
     console.log("Helper started.");
     //console.log(spamArr.toString());
 
-    window.setTimeout(setupFirstTime,2000);
-    window.setTimeout(setupVideoTitleObserver,3000);
+    window.setTimeout(setupFirstTime,4000);
+    window.setTimeout(setupVideoTitleObserver,6000);
     /*
     // Initial Setup
     window.setTimeout(enableSpamBlocker,3020);
